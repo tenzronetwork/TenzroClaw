@@ -59,6 +59,7 @@ import os
 
 RPC_URL = os.environ.get("TENZRO_RPC_URL", "https://rpc.tenzro.network")
 API_URL = os.environ.get("TENZRO_API_URL", "https://api.tenzro.network")
+RPC_TIMEOUT = int(os.environ.get("TENZRO_RPC_TIMEOUT", "120"))
 
 _request_id = 0
 
@@ -73,7 +74,7 @@ def _rpc(method: str, params: Any = None) -> dict:
         "params": params if params is not None else {},
         "id": _request_id,
     }
-    resp = requests.post(RPC_URL, json=payload, timeout=30)
+    resp = requests.post(RPC_URL, json=payload, timeout=RPC_TIMEOUT)
     resp.raise_for_status()
     data = resp.json()
     if "error" in data:
